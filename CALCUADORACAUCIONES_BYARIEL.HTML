@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Financiera de Ariel</title>
+    <style>
+        body {
+            font-family: 'Arial Black', Gadget, sans-serif; /* Fuente genial para toda la calculadora */
+            background-image: url('https://images.unsplash.com/photo-151974149767?ixlib=rb-4.0.3&q=80&w=1887&auto=format&fit=crop&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333; 
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+        }
+        .form-container, .results-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: calc(50% - 15px);
+            transition: transform 0.3s ease;
+        }
+        .form-container:hover, .results-container:hover {
+            transform: translateY(-5px);
+        }
+        .form-container {
+            position: relative;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-title {
+            color: #007bff;
+            font-size: 28px;
+            text-align: left;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .header-subtitle {
+            color: #555;
+            font-size: 18px;
+            text-align: left;
+            margin-top: 5px;
+        }
+        .header-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            text-transform: uppercase; /* Mayúsculas */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease;
+        }
+        button.success {
+            background-color: #28a745; /* Verde brillante */
+        }
+        button.error {
+            background-color: #dc3545; /* Rojo brillante */
+        }
+        .results-container {
+            background-color: rgba(33, 37, 41, 0.95); /* Fondo oscuro */
+            color: #fff;
+        }
+        .results-container p {
+            margin: 10px 0;
+            color: #fff;
+        }
+        .results-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #444;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .interests {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .interests span {
+            font-weight: bold;
+        }
+        .interests .compuesto {
+            color: #28a745;
+        }
+        .interests .simple {
+            color: #dc3545;
+        }
+        .separator {
+            margin: 20px 0;
+            border-top: 1px solid #ddd;
+        }
+        .difference-label {
+            font-weight: bold;
+            color: #fff;
+        }
+        .explanation {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .explanation h3 {
+            color: #007bff;
+            font-size: 18px;
+        }
+        .explanation p {
+            line-height: 1.6;
+            color: #fff;
+            font-size: 14px;
+        }
+        .title-separator {
+            margin-top: 20px;
+            border-top: 1px solid #555;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .form-container, .results-container {
+                width: 100%;
+            }
+            .header-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .header-title {
+                margin-bottom: 10px;
+            }
+            .header-subtitle {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Formulario -->
+        <div class="form-container">
+            <div class="header-container">
+                <div class="title-and-subtitle">
+                    <h1 class="header-title">Calculadora Financiera de Ariel</h1>
+                    <p class="header-subtitle">(Caución: Generando Interés Compuesto)</p>
+                </div>
+                <img src="https://i.imgur.com/flJ8SEt.jpeg"  alt="Ariel" class="header-image">
+            </div>
+            
+            <label for="capital">Capital Inicial (en pesos):</label>
+            <input type="number" id="capital" placeholder="Ej: 10000" step="0.01">
+            
+            <label for="tasaAnual">Tasa de Interés Anual (%):</label>
+            <input type="number" id="tasaAnual" placeholder="Ej: 10" step="0.01">
+            
+            <label for="dias">Duración (en días):</label>
+            <input type="number" id="dias" placeholder="Ej: 365" step="1">
+            
+            <button id="calcularButton">CALCULAR INTERESES</button>
+        </div>
+
+        <!-- Resultados -->
+        <div class="results-container">
+            <h2>Tus resultados son los siguientes:</h2>
+            <div class="title-separator"></div>
+            
+            <p>Monto total con interés compuesto:</p>
+            <input type="text" id="resultadoTotal" readonly>
+            <div class="interests">
+                <span class="compuesto">Intereses Compuestos:</span>
+                <span id="interesesCompuestos" class="compuesto"></span>
+            </div>
+            
+            <p>Monto con interés simple (Como lo que sacarias en un Plazo fijo):</p>
+            <input type="text" id="resultadoSimple" readonly>
+            <div class="interests">
+                <span class="simple">Intereses Simples:</span>
+                <span id="interesesSimples" class="simple"></span>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <p class="difference-label">Esta es la diferencia del Interés compuesto a tu favor ;)</p>
+            <input type="text" id="diferenciaIntereses" readonly>
+            
+            <div class="explanation">
+                <h3>¿Por qué es mejor el interés compuesto?</h3>
+                <p>El interés compuesto genera intereses sobre intereses, haciendo que tu dinero crezca más rápido. ¡Es como una bola de nieve financiera! 😉</p>
+                <p>Con el interés compuesto, no solo ganas intereses sobre el capital inicial, sino también sobre los intereses que has ganado en periodos anteriores. Esto resulta en un crecimiento exponencial del capital a lo largo del tiempo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtener el botón por su ID
+        const button = document.getElementById('calcularButton');
+
+        // Asignar la función calcularIntereses al evento click del botón
+        button.addEventListener('click', calcularIntereses);
+
+        function calcularIntereses() {
+            // Limpiar clases de error/success
+            button.classList.remove('error');
+            button.classList.remove('success');
+
+            // Obtener valores de los inputs
+            const capital = parseFloat(document.getElementById('capital').value);
+            const tasaAnual = parseFloat(document.getElementById('tasaAnual').value);
+            const dias = parseInt(document.getElementById('dias').value);
+
+            // Validar entradas
+            if (isNaN(capital) || isNaN(tasaAnual) || isNaN(dias) || capital <= 0 || tasaAnual <= 0 || dias <= 0) {
+                // Mostrar mensaje de error
+                button.textContent = 'VERIFICA VALORES';
+                button.classList.add('error');
+                return;
+            }
+
+            // Calcular la tasa diaria de interés
+            const tasaDiaria = tasaAnual / 100 / 365;
+
+            // Calcular interés simple
+            const interesesSimples = capital * (tasaAnual / 100) * (dias / 365);
+            const montoSimple = capital + interesesSimples;
+
+            // Calcular interés compuesto usando la fórmula directa
+            const montoCompuesto = capital * Math.pow(1 + tasaDiaria, dias);
+            const interesesCompuestos = montoCompuesto - capital;
+
+            // Calcular la diferencia entre intereses compuestos e intereses simples
+            const diferencia = interesesCompuestos - interesesSimples;
+
+            // Mostrar los resultados con formato de moneda
+            const formatter = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' });
+            document.getElementById('resultadoTotal').value = `Monto Total: ${formatter.format(montoCompuesto)}`;
+            document.getElementById('resultadoSimple').value = `Monto Total: ${formatter.format(montoSimple)}`;
+            document.getElementById('diferenciaIntereses').value = `Diferencia: ${formatter.format(diferencia)}`;
+
+            // Mostrar los montos de los intereses ganados
+            document.getElementById('interesesCompuestos').textContent = `${formatter.format(interesesCompuestos)}`;
+            document.getElementById('interesesSimples').textContent = `${formatter.format(interesesSimples)}`;
+
+            // Cambiar texto del botón a "CÁLCULO REALIZADO!"
+            button.textContent = 'CÁLCULO REALIZADO!';
+            button.classList.add('success');
+        }
+    </script>
+</body>
+</html>
